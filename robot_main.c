@@ -172,7 +172,10 @@ bool confirmBeaconFrequency(int targetFreq){
     setFreq(targetFreq);   // leave tuned where the caller expects
     ReadPD();
 
-    return (sumTarget >= sumOther);
+    /* Must actually see a beacon (above ambient) AND target freq must be
+       stronger than the off freq.  Without the ambient guard, an IRB that
+       reads 0/0 would spuriously confirm. */
+    return (sumTarget > ambient_level) && (sumTarget >= sumOther);
 }
 
 /* ==========================================================================
